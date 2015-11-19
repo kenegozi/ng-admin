@@ -32,7 +32,9 @@ export default function maChoiceField($compile) {
                     if (field.type().indexOf('reference') === 0 && field.remoteComplete()) { // FIXME wrong place to do that
                         scope.refreshDelay = field.remoteCompleteOptions().refreshDelay;
                         refreshAttributes = 'refresh-delay="refreshDelay" refresh="refresh({ $search: $select.search })"';
-                        itemsFilter = '';
+                        // workaround ngadmin 1.3.x bug, see https://github.com/angular-ui/ui-select/issues/1233
+                        itemsFilter = '| filter: noopFilter';
+                        scope.noopFilter = () => true;
                     }
 
                     var choices = (typeof scope.choices == 'function' && scope.choices()) ? scope.choices() : (field.choices ? field.choices() : []);
